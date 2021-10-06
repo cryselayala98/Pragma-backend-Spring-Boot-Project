@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - - id: photo-service
+              uri: lb://photo-service
+              predicates:
+                - Path=/photos/**
+        - id: client-service
+          uri: lb://client-service
+          predicates:
+            - Path=/clients/**

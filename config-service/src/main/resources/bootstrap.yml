@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/cryselayala98/example-microservices-springboot.git
+          searchPaths: config-data
+          username: ${GIT_USER_PERSONAL}
+          password: ${GIT_PASSWORD_PERSONAL}
+  security:
+    user:
+      name: root
+      password: s3cr3t

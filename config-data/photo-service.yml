@@ -1,0 +1,59 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+spring:
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost/db_practica_backend_java?serverTimezone=America/Bogota&useSSL=false
+    password: ''
+    application:
+      name: servicio-foto
+    data:
+      mongodb:
+        database: db_practica_backend_java
+        port: '27017'
+        host: localhost
+    jpa:
+      hibernate:
+        ddl-auto: update
+  jpa:
+    properties:
+      hibernate:
+        use_sql_comments: 'false'
+        format_sql: 'false'
+        show_sql: 'true'
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+  port: '8091'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+server:
+  port: ${PORT:0}
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug

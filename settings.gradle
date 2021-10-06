@@ -1,0 +1,7 @@
+include 'photo-service'
+include 'client-service'
+include 'config-service'
+include 'registry-service'
+include 'gateway-service'
+include 'admin-service'
+rootProject.name = 'springbootproject'

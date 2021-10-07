@@ -1,9 +1,41 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 spring:
-  data:
-    mongodb:
-      authentication-database: admin
-      database: spring-boot-project-mongodb-photos-database
-      username: ${USER_MONGODB_CONNECTION}
-      password: ${PASSWORD_MONGODB_CONNECTION}
-      port: '27017'
-      host: localhost
+    application:
+      name: photo-service
+    data:
+      mongodb:
+        authentication-database: admin
+        database: db_practica_backend_java
+        username: ${USER_MONGODB_CONNECTION}
+        password: ${PASSWORD_MONGODB_CONNECTION}
+        port: '27017'
+        host: localhost
+  jpa:
+    properties:
+      hibernate:
+        use_sql_comments: 'false'
+        format_sql: 'false'
+        show_sql: 'true'
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+  port: '8091'
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+

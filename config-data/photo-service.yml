@@ -4,11 +4,6 @@ management:
       exposure:
         include: '*'
 spring:
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://3307:localhost:3307/spring-boot-project-mysql-database
-    username: ${USER_MYSQL_CONNECTION}
-    password: ${PASSWORD_MYSQL_CONNECTION}
   data:
     mongodb:
       authentication-database: admin
@@ -17,15 +12,6 @@ spring:
       password: ${PASSWORD_MONGODB_CONNECTION}
       port: '27017'
       host: localhost
-  jpa:
-    properties:
-      hibernate:
-        use_sql_comments: 'false'
-        format_sql: 'false'
-        show_sql: 'true'
-    show-sql: 'true'
-    hibernate:
-      ddl-auto: update
 logging:
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'

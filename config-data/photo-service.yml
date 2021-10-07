@@ -4,12 +4,10 @@ management:
       exposure:
         include: '*'
 spring:
-    application:
-      name: photo-service
     data:
       mongodb:
         authentication-database: admin
-        database: db_practica_backend_java
+        database: spring-boot-project-mongodb-photos-database
         username: ${USER_MONGODB_CONNECTION}
         password: ${PASSWORD_MONGODB_CONNECTION}
         port: '27017'

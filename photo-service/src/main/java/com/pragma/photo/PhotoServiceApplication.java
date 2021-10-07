@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 //@EnableEurekaClient
-@SpringBootApplication
 @EnableMongoRepositories
+@SpringBootApplication
 public class PhotoServiceApplication {
 
 	public static void main(String[] args) {

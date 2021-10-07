@@ -7,8 +7,8 @@ spring:
   data:
     mongodb:
       database: spring-boot-project-mongodb-photos-database
-      username: ${USER_MONGODB_CONNECTION}
-      password: ${PASSWORD_MONGODB_CONNECTION}
+      username: root
+      password: crisel1lamejor2 # >:v
       port: '27017'
       host: localhost
 logging:

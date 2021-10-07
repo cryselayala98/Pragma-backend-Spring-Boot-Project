@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client createClient(Client client) {
 
-        Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification()));
+        Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
 
         //devolver objeto si ya existe
         if (clientQuery !=null){

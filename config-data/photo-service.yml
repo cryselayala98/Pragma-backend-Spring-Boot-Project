@@ -5,8 +5,8 @@ management:
         include: '*'
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://3307:localhost:3307/spring-boot-project-mysql-database
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/spring-boot-project-mysql-database
     username: ${USER_MYSQL_CONNECTION}
     password: ${PASSWORD_MYSQL_CONNECTION}
   data:
@@ -18,7 +18,7 @@ spring:
       port: '27017'
       host: localhost
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     properties:
       hibernate:
         use_sql_comments: 'false'

@@ -4,14 +4,14 @@ management:
       exposure:
         include: '*'
 spring:
-    data:
-      mongodb:
-        authentication-database: admin
-        database: spring-boot-project-mongodb-photos-database
-        username: ${USER_MONGODB_CONNECTION}
-        password: ${PASSWORD_MONGODB_CONNECTION}
-        port: '27017'
-        host: localhost
+  data:
+    mongodb:
+      authentication-database: admin
+      database: spring-boot-project-mongodb-photos-database
+      username: ${USER_MONGODB_CONNECTION}
+      password: ${PASSWORD_MONGODB_CONNECTION}
+      port: '27017'
+      host: localhost
   jpa:
     properties:
       hibernate:

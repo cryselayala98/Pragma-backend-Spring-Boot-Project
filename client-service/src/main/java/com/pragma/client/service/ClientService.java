@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface ClientService {
     public List<Client> findClientAll();
-    public List<Client> findfindByAgeGreaterThanEqual(Integer age);
+    public List<Client> findByAgeGreaterThanEqual(Integer age);
     public Client getClient(TypeIdentification typeDocument, String numberIdentification);
+    public Client getClient(Long clientId);
 
     public Client createClient(Client client);
     public Client updateClient(Client client);

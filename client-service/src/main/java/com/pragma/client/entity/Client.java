@@ -2,6 +2,7 @@ package com.pragma.client.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pragma.client.model.Photo;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@Builder
 @Table(name = "client")
 public class Client {
 

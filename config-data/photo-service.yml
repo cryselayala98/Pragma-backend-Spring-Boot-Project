@@ -4,20 +4,16 @@ management:
       exposure:
         include: '*'
 spring:
-  datasource:
-    username: root
-    url: jdbc:mysql://localhost/db_practica_backend_java?serverTimezone=America/Bogota&useSSL=false
-    password: ''
     application:
       name: servicio-foto
     data:
       mongodb:
+        authentication-database: admin
         database: db_practica_backend_java
+        username: ${USER_MONGODB_CONNECTION}
+        password: ${PASSWORD_MONGODB_CONNECTION}
         port: '27017'
         host: localhost
-    jpa:
-      hibernate:
-        ddl-auto: update
   jpa:
     properties:
       hibernate:
@@ -37,23 +33,9 @@ server:
     include-message: always
   port: '8091'
 eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     serviceUrl:
       defaultZone: http://localhost:8099/eureka/
 
-
-eureka:
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-
-server:
-  port: ${PORT:0}
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug

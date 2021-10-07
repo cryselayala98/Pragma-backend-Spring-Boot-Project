@@ -7,5 +7,6 @@ import lombok.Data;
 @Builder
 public class Photo {
 
-    //agregar atributos del entity foto
+    private Long id;
+    private String photo;
 }

@@ -26,13 +26,18 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> findfindByAgeGreaterThanEqual(Integer age) {
+    public List<Client> findByAgeGreaterThanEqual(Integer age) {
         return clientRepository.findByAgeGreaterThanEqual(age);
     }
 
     @Override
     public Client getClient(TypeIdentification typeDocument, String numberIdentification) {
         return clientRepository.findByTypeIdentificationAndNumberIdentification(typeDocument, numberIdentification);
+    }
+
+    @Override
+    public Client getClient(Long clientId) {
+        return clientRepository.findById(clientId).orElse(null);
     }
 
     @Override
@@ -45,8 +50,8 @@ public class ClientServiceImpl implements ClientService {
             return  clientQuery;
         }
 
-        //actualizar foto
-        productClient.updateStockProduct(item.getProductId(), item.getQuantity() * -1);
+        //actualizar foto llamando al client de photo
+
 
         client.setState("CREATED");
         client = clientRepository.save(client);
@@ -56,16 +61,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client updateClient(Client client) {
-        CX invoiceDB = getInvoice(invoice.getId());
-        if (invoiceDB == null){
+        Client clientQuery = getClient(client.getId());
+
+        if (clientQuery == null){
             return  null;
         }
-        invoiceDB.setCustomerId(invoice.getCustomerId());
-        invoiceDB.setDescription(invoice.getDescription());
-        invoiceDB.setNumberInvoice(invoice.getNumberInvoice());
-        invoiceDB.getItems().clear();
-        invoiceDB.setItems(invoice.getItems());
-        return invoiceRepository.save(invoiceDB);
+
+        clientQuery.setName(client.getName());
+        clientQuery.setLastName(client.getLastName());
+        clientQuery.setAge(client.getAge());
+        clientQuery.setNumberIdentification(client.getNumberIdentification());
+        clientQuery.setTypeIdentification(client.getTypeIdentification());
+        clientQuery.setCity(client.getCity());
+
+        return clientRepository.save(clientQuery);
     }
 
     @Override

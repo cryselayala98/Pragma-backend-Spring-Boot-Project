@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/cryselayala98/example-microservices-springboot.git
+          uri: https://github.com/cryselayala98/Pragma-backend-Spring-Boot-Project.git
           searchPaths: config-data
           username: ${GIT_USER_PERSONAL}
           password: ${GIT_PASSWORD_PERSONAL}

@@ -2,6 +2,7 @@ package com.pragma.photo.controller;
 
 import com.pragma.photo.entity.Photo;
 import com.pragma.photo.service.PhotoService;
+import com.pragma.photo.utilities.ErrorUtils.ErrorMessages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,29 +22,51 @@ public class PhotoController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Photo> getPhoto(@PathVariable("id") String id) {
-        return null;
+        Photo photo = photoService.getPhoto(id);
+
+        if(photo == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(photo);
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<Photo> addPhoto(@RequestParam("image") Photo image) throws IOException {
-        Photo photoDB = photoService.addPhoto(image);
+    public ResponseEntity<Photo> addPhoto(@RequestBody MultipartFile photo) throws IOException {
+        Photo photoDB = photoService.addPhoto(photo);
         return ResponseEntity.status(HttpStatus.CREATED).body(photoDB);
     }
 
     @PostMapping
-    public ResponseEntity<Photo> addPhoto(@RequestParam("image") MultipartFile image) throws IOException {
-        Photo photoDB = photoService.addPhoto(image);
-
+    public ResponseEntity<Photo> addPhoto(@RequestBody Photo photo) throws IOException {
+        Photo photoDB = photoService.addPhoto(photo);
         return ResponseEntity.status(HttpStatus.CREATED).body(photoDB);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Photo> updatePhoto(@PathVariable("id") String id, @RequestBody(required = true) Photo photo) {
-        return null;
+        photo.setId(id);
+        Photo photoUpdated = photoService.updatePhoto(id, photo);
+
+        if(photoUpdated ==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(photoUpdated);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Photo> deletePhoto(@PathVariable("id") String id) {
-        return null;
+        log.info("Fetching & Deleting photo with id {}", id);
+
+        Photo photoQuery = photoService.getPhoto(id);
+        if(photoQuery == null){
+            log.error("Unable to delete. Photo with id {} not found.", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Photo.builder()
+                    .id(ErrorMessages.photoDoesNotExist(id))
+                    .build());
+        }
+        photoService.deletePhoto(photoQuery);
+        return ResponseEntity.ok(photoQuery);
     }
 }

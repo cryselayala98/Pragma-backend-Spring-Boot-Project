@@ -53,7 +53,7 @@ public class Client {
 
     //@NotNull(message = "La foto no puede estar vacía")
     @Column(name = "photo_id")
-    private Long photoId;
+    private String photoId;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)

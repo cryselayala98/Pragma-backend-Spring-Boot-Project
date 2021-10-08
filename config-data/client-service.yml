@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/spring-boot-project-mysql-database
+    url: jdbc:mysql://localhost:3307/spring-boot-project-mysql-database?serverTimezone=UTC&useSSL=true
     username: root
     password: crissjazz98
   jpa:
@@ -18,7 +18,7 @@ server:
   error:
     include-binding-errors: always
     include-message: always
-  port: 8092
+  port: '8092'
 logging:
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'

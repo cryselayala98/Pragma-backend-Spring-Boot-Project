@@ -1,13 +1,22 @@
-package com.pragma.client.service;
+package com.pragma.client.service.impl;
 
+import com.pragma.client.client.PhotoClient;
+import com.pragma.client.entity.City;
 import com.pragma.client.entity.Client;
 import com.pragma.client.entity.TypeIdentification;
+import com.pragma.client.model.Photo;
 import com.pragma.client.repository.CityRepository;
 import com.pragma.client.repository.ClientRepository;
 import com.pragma.client.repository.TypeIdentificationRepository;
+import com.pragma.client.service.CityService;
+import com.pragma.client.service.ClientService;
+import com.pragma.client.service.TypeIdentificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -17,10 +26,13 @@ public class ClientServiceImpl implements ClientService {
     ClientRepository clientRepository;
 
     @Autowired
-    TypeIdentificationRepository typeIdentificationRepository;
+    TypeIdentificationService typeIdentificationService;
 
     @Autowired
-    CityRepository cityRepository;
+    CityService cityService;
+
+    @Autowired
+    PhotoClient photoClient;
 
     @Override
     public List<Client> findClientAll() {
@@ -45,16 +57,31 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client createClient(Client client) {
+    public Client createClient(Client client) throws IOException {
+
+        City cityQuery = cityService.getCity(client.getCity().getId());
+        if(cityQuery == null){
+            client.setCity(null);
+            return client;
+        }
+
+        client.setCity(cityQuery);
+
+        TypeIdentification typeIdentificationQuery = typeIdentificationService.getTypeIdentificationByAbbreviation(client.getTypeIdentification().getAbbreviation());
+        if(typeIdentificationQuery == null){
+            client.setTypeIdentification(null);
+            return client;
+        }
+
+        client.setTypeIdentification(typeIdentificationQuery);
 
         Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
 
-        if (clientQuery !=null){
+        if (clientQuery != null){
             return  clientQuery;
         }
 
-        //falta actualizar foto llamando al client de photo
-
+        Photo photoCreate = photoClient.addPhoto(client.getPhoto()).getBody();
 
         client.setState("CREATED");
         client = clientRepository.save(client);
@@ -77,11 +104,21 @@ public class ClientServiceImpl implements ClientService {
         clientQuery.setTypeIdentification(client.getTypeIdentification());
         clientQuery.setCity(client.getCity());
 
+        //update photo
+
         return clientRepository.save(clientQuery);
     }
 
     @Override
     public Client deleteClient(Client client) {
-        return null;
+
+        Client clientQuery = getClient(client.getId());
+
+        if (clientQuery == null){
+            return  null;
+        }
+
+        clientQuery.setState("DELETED");
+        return clientRepository.save(clientQuery);
     }
 }

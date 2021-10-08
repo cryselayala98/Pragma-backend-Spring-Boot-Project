@@ -2,8 +2,10 @@ package com.pragma.client.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pragma.client.model.Photo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,9 +15,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Builder
 @Table(name = "client")

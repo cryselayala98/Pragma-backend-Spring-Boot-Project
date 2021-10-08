@@ -3,6 +3,7 @@ package com.pragma.client.service;
 import com.pragma.client.entity.Client;
 import com.pragma.client.entity.TypeIdentification;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ClientService {
@@ -11,7 +12,7 @@ public interface ClientService {
     public Client getClient(TypeIdentification typeDocument, String numberIdentification);
     public Client getClient(Long clientId);
 
-    public Client createClient(Client client);
+    public Client createClient(Client client) throws IOException;
     public Client updateClient(Client client);
     public Client deleteClient(Client client);
 

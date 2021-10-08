@@ -1,8 +1,13 @@
 package com.pragma.client.controller;
 
+import com.pragma.client.entity.City;
+import com.pragma.client.entity.Client;
+import com.pragma.client.entity.TypeIdentification;
+import com.pragma.client.service.CityService;
 import com.pragma.client.service.ClientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pragma.client.service.TypeIdentificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,71 +25,83 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/clients")
 public class ClientRest {
 
     @Autowired
     ClientService clientService;
 
-    /*
-    // -------------------Retrieve All Invoices--------------------------------------------
     @GetMapping
-    public ResponseEntity<List<Invoice>> listAllInvoices() {
-        return null;
-        return  ResponseEntity.ok(invoices);
+    public ResponseEntity<List<Client>> listAllClients() {
+        List<Client> clients = clientService.findClientAll();
+        if (clients.isEmpty()) {
+            return  ResponseEntity.noContent().build();
+        }
+        return  ResponseEntity.ok(clients);
     }
 
-    // -------------------Retrieve Single Invoice------------------------------------------
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Invoice> getInvoice(@PathVariable("id") long id) {
-        log.info("Fetching Invoice with id {}", id);
-        Invoice invoice  = clientService.getInvoice(id);
-        if (null == invoice) {
-            log.error("Invoice with id {} not found.", id);
+    public ResponseEntity<Client> getClient(@PathVariable("id") long id) {
+        log.info("Fetching client with id {}", id);
+        Client client  = clientService.getClient(id);
+
+        if (client == null) {
+            log.error("Client with id {} not found.", id);
             return  ResponseEntity.notFound().build();
         }
-        return  ResponseEntity.ok(invoice);
+
+        return  ResponseEntity.ok(client);
     }
 
-    // -------------------Create a Invoice-------------------------------------------
     @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@Valid @RequestBody Invoice invoice, BindingResult result) {
-        log.info("Creating Invoice : {}", invoice);
+    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) throws IOException {
+
+        log.info("Creating client : {}", client);
+
         if (result.hasErrors()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
         }
-        Invoice invoiceDB = clientService.createInvoice (invoice);
 
-        return  ResponseEntity.status( HttpStatus.CREATED).body(invoiceDB);
+
+        Client clientCreate = clientService.createClient(client);
+
+        if(clientCreate.getCity() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo de ciudad no válido");
+        }
+
+        if(clientCreate.getTypeIdentification() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo tipo de identificación no válido");
+        }
+
+        return  ResponseEntity.status( HttpStatus.CREATED).body(clientCreate);
     }
 
-    // ------------------- Update a Invoice ------------------------------------------------
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateInvoice(@PathVariable("id") long id, @RequestBody Invoice invoice) {
-        log.info("Updating Invoice with id {}", id);
+    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @RequestBody Client client) {
+        log.info("Updating Client with id {}", id);
 
-        invoice.setId(id);
-        Invoice currentInvoice= clientService.updateInvoice(invoice);
+        client.setId(id);
+        Client currentClient = clientService.updateClient(client);
 
-        if (currentInvoice == null) {
-            log.error("Unable to update. Invoice with id {} not found.", id);
+        if (currentClient == null) {
+            log.error("Unable to update. Client with id {} not found.", id);
             return  ResponseEntity.notFound().build();
         }
-        return  ResponseEntity.ok(currentInvoice);
+        return  ResponseEntity.ok(currentClient);
     }
 
-    // ------------------- Delete a Invoice-----------------------------------------
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Invoice> deleteInvoice(@PathVariable("id") long id) {
-        log.info("Fetching & Deleting Invoice with id {}", id);
 
-        Invoice invoice = clientService.getInvoice(id);
-        if (invoice == null) {
-            log.error("Unable to delete. Invoice with id {} not found.", id);
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Client> deleteClient(@PathVariable("id") long id) {
+        log.info("Fetching & Deleting Client with id {}", id);
+
+        Client clientDelete = clientService.getClient(id);
+        if (clientDelete == null) {
+            log.error("Unable to delete. Client with id {} not found.", id);
             return  ResponseEntity.notFound().build();
         }
-        invoice = clientService.deleteInvoice(invoice);
-        return ResponseEntity.ok(invoice);
+        clientDelete = clientService.deleteClient(clientDelete);
+        return ResponseEntity.ok(clientDelete);
     }
 
     private String formatMessage( BindingResult result){
@@ -107,5 +125,4 @@ public class ClientRest {
         return jsonString;
     }
 
-     */
 }

@@ -6,9 +6,11 @@ import com.pragma.client.repository.CityRepository;
 import com.pragma.client.repository.ClientRepository;
 import com.pragma.client.repository.TypeIdentificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ClientServiceImpl implements ClientService {
 
     @Autowired

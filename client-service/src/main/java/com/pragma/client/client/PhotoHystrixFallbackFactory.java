@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class PhotoHystrixFallbackFactory implements PhotoClient{
     @Override
     public ResponseEntity<Photo> getPhoto(Long id) {
-        Photo photo =photo.builder()
+        /**Photo photo =photo.builder()
                 .name("none")
                 .lastName("none")
                 .city(null)
@@ -18,5 +18,7 @@ public class PhotoHystrixFallbackFactory implements PhotoClient{
                 .age(null)
                 .build();
         return ResponseEntity.ok(client);
+         */
+        return null;
     }
 }

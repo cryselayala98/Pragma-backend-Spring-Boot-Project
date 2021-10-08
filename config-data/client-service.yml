@@ -16,16 +16,11 @@ spring:
         show_sql: true
         use_sql_comments: false
     show-sql: true
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8099/eureka/
-    fetchRegistry: true
 server:
   error:
     include-binding-errors: always
     include-message: always
-  port: 8091
+  port: 8092
 logging:
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n'
@@ -41,3 +36,9 @@ management:
     web:
       exposure:
         include: "*"
+#eureka:
+  #client:
+    #serviceUrl:
+      #defaultZone: http://localhost:8099/eureka/
+    #fetchRegistry: true
+    

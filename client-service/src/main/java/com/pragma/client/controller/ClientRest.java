@@ -25,13 +25,11 @@ public class ClientRest {
     @Autowired
     ClientService clientService;
 
+    /*
     // -------------------Retrieve All Invoices--------------------------------------------
     @GetMapping
     public ResponseEntity<List<Invoice>> listAllInvoices() {
-        List<Invoice> invoices = clientService.findInvoiceAll();
-        if (invoices.isEmpty()) {
-            return  ResponseEntity.noContent().build();
-        }
+        return null;
         return  ResponseEntity.ok(invoices);
     }
 
@@ -108,4 +106,6 @@ public class ClientRest {
         }
         return jsonString;
     }
+
+     */
 }

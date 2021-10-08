@@ -7,11 +7,12 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
-@EnableEurekaClient
+
+/*@EnableEurekaClient
 @EnableFeignClients
 @EnableHystrix
-@EnableHystrixDashboard
+@EnableHystrixDashboard*/
+@SpringBootApplication
 public class ClientServiceApplication {
 
 	public static void main(String[] args) {

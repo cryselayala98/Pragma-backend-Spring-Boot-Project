@@ -30,11 +30,11 @@ public class Client {
     @Column(name = "last_name", nullable=false)
     private String lastName;
 
+    //@Column(nullable=false)
     @NotNull(message = "El tipo de documento no puede estar vacío")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="type_identification_card_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @Column(nullable=false)
     private TypeIdentification typeIdentification;
 
     @NotNull(message = "El número de documento no puede estar vacío")

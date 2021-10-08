@@ -5,7 +5,7 @@ spring:
     username: root
     password: crissjazz98
   jpa:
-    database-platform: dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: none
     properties:

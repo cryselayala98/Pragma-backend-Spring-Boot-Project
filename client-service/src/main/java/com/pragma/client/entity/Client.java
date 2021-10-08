@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pragma.client.model.Photo;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
@@ -30,7 +33,6 @@ public class Client {
     @Column(name = "last_name", nullable=false)
     private String lastName;
 
-    //@Column(nullable=false)
     @NotNull(message = "El tipo de documento no puede estar vacío")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="type_identification_card_id")
@@ -51,21 +53,19 @@ public class Client {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private City city;
 
-    //@NotNull(message = "La foto no puede estar vacía")
     @Column(name = "photo_id")
     private String photoId;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
-    private Date createAt;
-
     private String state;
+
+    @Column(name = "created_at", updatable=false)
+    @CreationTimestamp
+    private Timestamp createAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @Transient
     private Photo photo;
-
-    @PrePersist
-    public void prePersist() {
-        this.createAt = new Date();
-    }
 }

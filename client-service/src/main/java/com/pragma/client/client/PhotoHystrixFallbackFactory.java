@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PhotoHystrixFallbackFactory implements PhotoClient{
+
     @Override
     public ResponseEntity<Photo> getPhoto(Long id) {
         /**Photo photo =photo.builder()

@@ -34,11 +34,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClient(TypeIdentification typeDocument, String numberIdentification) {
+        //falta agregar la busqueda con foto
         return clientRepository.findByTypeIdentificationAndNumberIdentification(typeDocument, numberIdentification);
     }
 
     @Override
     public Client getClient(Long clientId) {
+        //falta agregar la busqueda con foto
         return clientRepository.findById(clientId).orElse(null);
     }
 
@@ -47,12 +49,11 @@ public class ClientServiceImpl implements ClientService {
 
         Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
 
-        //devolver objeto si ya existe
         if (clientQuery !=null){
             return  clientQuery;
         }
 
-        //actualizar foto llamando al client de photo
+        //falta actualizar foto llamando al client de photo
 
 
         client.setState("CREATED");

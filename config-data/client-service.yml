@@ -34,9 +34,9 @@ management:
     web:
       exposure:
         include: "*"
-#eureka:
-  #client:
-    #serviceUrl:
-      #defaultZone: http://localhost:8099/eureka/
-    #fetchRegistry: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
+    fetchRegistry: true
     

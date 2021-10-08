@@ -19,11 +19,10 @@ server:
     include-binding-errors: always
     include-message: always
   port: '8091'
-
-#eureka:
-  #instance:
-    #instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-  #client:
-    #serviceUrl:
-      #defaultZone: http://localhost:8099/eureka/
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8099/eureka/
 

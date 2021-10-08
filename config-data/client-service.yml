@@ -2,8 +2,8 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://3307:localhost:3307/spring-boot-project-mysql-database
-    username: ${USER_MYSQL_CONNECTION}
-    password: ${PASSWORD_MYSQL_CONNECTION}
+    username: root
+    password: crissjazz98
   application:
     name: client-service
   jpa:

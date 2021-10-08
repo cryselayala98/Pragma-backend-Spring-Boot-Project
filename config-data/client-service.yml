@@ -4,10 +4,8 @@ spring:
     url: jdbc:mysql://localhost:3307/spring-boot-project-mysql-database
     username: root
     password: crissjazz98
-  application:
-    name: client-service
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: dialect.MySQL8Dialect
     hibernate:
       ddl-auto: none
     properties:

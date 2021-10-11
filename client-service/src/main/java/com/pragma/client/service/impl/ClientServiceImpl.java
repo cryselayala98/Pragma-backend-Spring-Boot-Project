@@ -12,6 +12,10 @@ import com.pragma.client.service.CityService;
 import com.pragma.client.service.ClientService;
 import com.pragma.client.service.TypeIdentificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,18 +39,18 @@ public class ClientServiceImpl implements ClientService {
     PhotoClient photoClient;
 
     @Override
-    public List<Client> findClientAll() {
+    public Page<Client> findClientAll(Pageable pageable) {
 
-        List<Client> listClients = clientRepository.findAll();
+        Page<Client> pageClients = clientRepository.findAll(pageable);
 
-        if(listClients.isEmpty()) return listClients;
+        if(pageClients.isEmpty()) return pageClients;
 
-        listClients.forEach(client ->{
+        pageClients.getContent().forEach(client ->{
             Photo photo = photoClient.getPhoto(client.getPhotoId()).getBody();
             client.setPhoto(photo);
         });
 
-        return listClients;
+        return pageClients;
     }
 
     @Override
@@ -186,5 +190,4 @@ public class ClientServiceImpl implements ClientService {
         clientQuery.setState("DELETED");
         return clientRepository.save(clientQuery);
     }
-    //public ResponseEntity<List<CustomerDto>> findByIdType(IdType idType)
 }

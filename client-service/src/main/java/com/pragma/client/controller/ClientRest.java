@@ -8,6 +8,11 @@ import com.pragma.client.utilities.Validation.ErrorMessage;
 import com.pragma.client.utilities.Validation.FormatErrorString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -30,8 +35,14 @@ public class ClientRest {
     ClientService clientService;
 
     @GetMapping
-    public ResponseEntity<List<Client>> listAllClients() {
-        List<Client> clients = clientService.findClientAll();
+    public ResponseEntity<Page<Client>> listAllClients(
+            @PageableDefault(page = 0, size = 10)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "name", direction = Sort.Direction.ASC),
+                    @SortDefault(sort = "lastName", direction = Sort.Direction.ASC)
+            }) Pageable pageable) {
+
+        Page<Client> clients = clientService.findClientAll(pageable);
         if (clients.isEmpty()) {
             return  ResponseEntity.noContent().build();
         }

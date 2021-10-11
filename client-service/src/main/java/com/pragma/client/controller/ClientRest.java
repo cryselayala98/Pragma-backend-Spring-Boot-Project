@@ -1,13 +1,11 @@
 package com.pragma.client.controller;
 
-import com.pragma.client.entity.City;
 import com.pragma.client.entity.Client;
-import com.pragma.client.entity.TypeIdentification;
-import com.pragma.client.service.CityService;
 import com.pragma.client.service.ClientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.client.service.TypeIdentificationService;
+import com.pragma.client.utilities.Validation.ErrorMessage;
+import com.pragma.client.utilities.Validation.FormatErrorString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,13 +51,40 @@ public class ClientRest {
         return  ResponseEntity.ok(client);
     }
 
+    @GetMapping(value = "/document/{abbreviation}/{documentNumber}")
+    public ResponseEntity<Client> getClientByDocument(@PathVariable("abbreviation") String documentAbbreviation, @PathVariable("documentNumber") String documentNumber) {
+        log.info("Fetching client with document {}", (documentAbbreviation + ": " + documentNumber));
+        Client client  = clientService.getClient(documentAbbreviation, documentNumber);
+
+        if (client == null) {
+            log.error("Client with document {} not found.", (documentAbbreviation + ": " + documentNumber));
+            return  ResponseEntity.notFound().build();
+        }
+
+        return  ResponseEntity.ok(client);
+    }
+
+    @GetMapping(value = "/agemin/{age}")
+    public ResponseEntity<List<Client>> getClientByMinAge(@PathVariable("age") Integer age) {
+        log.info("Fetching clients older than {} years", age);
+        List<Client> listClient  = clientService.findByAgeGreaterThanEqual(age);
+
+        if (listClient.isEmpty()) {
+            log.error("Client with age older than {} years not found.", age);
+            return  ResponseEntity.notFound().build();
+        }
+
+        return  ResponseEntity.ok(listClient);
+    }
+
+
     @PostMapping
     public ResponseEntity<Client> createClient(@Valid @RequestBody Client client, BindingResult result) throws IOException {
 
         log.info("Creating client : {}", client);
 
         if (result.hasErrors()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FormatErrorString.formatMessage(result));
         }
 
 
@@ -77,8 +102,12 @@ public class ClientRest {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @RequestBody Client client) {
+    public ResponseEntity<?> updateClient(@PathVariable("id") long id, @Valid @RequestBody Client client, BindingResult result) {
         log.info("Updating Client with id {}", id);
+
+        if (result.hasErrors()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FormatErrorString.formatMessage(result));
+        }
 
         client.setId(id);
         Client currentClient = clientService.updateClient(client);
@@ -87,6 +116,15 @@ public class ClientRest {
             log.error("Unable to update. Client with id {} not found.", id);
             return  ResponseEntity.notFound().build();
         }
+
+        if(currentClient.getCity() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo de ciudad no válido");
+        }
+
+        if(currentClient.getTypeIdentification() == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo tipo de identificación no válido");
+        }
+
         return  ResponseEntity.ok(currentClient);
     }
 
@@ -102,27 +140,6 @@ public class ClientRest {
         }
         clientDelete = clientService.deleteClient(clientDelete);
         return ResponseEntity.ok(clientDelete);
-    }
-
-    private String formatMessage( BindingResult result){
-        List<Map<String,String>> errors = result.getFieldErrors().stream()
-                .map(err ->{
-                    Map<String,String> error =  new HashMap<>();
-                    error.put(err.getField(), err.getDefaultMessage());
-                    return error;
-
-                }).collect(Collectors.toList());
-        ErrorMessage errorMessage = ErrorMessage.builder()
-                .code("01")
-                .messages(errors).build();
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString="";
-        try {
-            jsonString = mapper.writeValueAsString(errorMessage);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return jsonString;
     }
 
 }

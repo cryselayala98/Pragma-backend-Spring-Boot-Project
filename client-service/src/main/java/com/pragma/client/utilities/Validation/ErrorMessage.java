@@ -1,4 +1,4 @@
-package com.pragma.client.controller;
+package com.pragma.client.utilities.Validation;
 
 
 import lombok.Builder;
@@ -8,7 +8,9 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Map;
 
-@Getter @Setter @Builder
+@Getter
+@Setter
+@Builder
 public class ErrorMessage {
     private String code ;
     private List<Map<String, String >> messages ;

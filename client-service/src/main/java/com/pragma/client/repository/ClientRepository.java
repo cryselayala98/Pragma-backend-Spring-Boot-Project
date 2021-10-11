@@ -3,6 +3,7 @@ package com.pragma.client.repository;
 import com.pragma.client.entity.Client;
 import com.pragma.client.entity.TypeIdentification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +12,10 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     public List<Client> findByAgeGreaterThanEqual(Integer age);
-    public Client findByTypeIdentificationAndNumberIdentification(TypeIdentification type, String numberIdentification);
+
+    @Query("SELECT c from Client c JOIN TypeIdentification ti ON c.typeIdentification = ti WHERE ti.abbreviation = :abbreviationIdentification AND c.numberIdentification = :numberIdentification ")
+    public Client findByTypeIdentificationAndNumberIdentification(String abbreviationIdentification, String numberIdentification);
+
     public Client findByNumberIdentification(String numberIdentification);
 
 }

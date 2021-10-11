@@ -17,9 +17,10 @@ public class TypeIdentification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type_identificacion_name", nullable = false)
+    @Column(name = "type_identificacion_name", unique=true, nullable = false)
     private String name;
 
+    @Column(unique=true)
     private String abbreviation;
 
 }

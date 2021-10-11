@@ -36,28 +36,72 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> findClientAll() {
-        return clientRepository.findAll();
+
+        List<Client> listClients = clientRepository.findAll();
+
+        if(listClients.isEmpty()) return listClients;
+
+        listClients.forEach(client ->{
+            Photo photo = photoClient.getPhoto(client.getPhotoId()).getBody();
+            client.setPhoto(photo);
+        });
+
+        return listClients;
     }
 
     @Override
     public List<Client> findByAgeGreaterThanEqual(Integer age) {
-        return clientRepository.findByAgeGreaterThanEqual(age);
+
+        List<Client> listClients = clientRepository.findByAgeGreaterThanEqual(age);
+
+        if(listClients.isEmpty()) return listClients;
+
+        listClients.forEach(client ->{
+            Photo photo = photoClient.getPhoto(client.getPhotoId()).getBody();
+            client.setPhoto(photo);
+        });
+
+        return listClients;
     }
 
     @Override
-    public Client getClient(TypeIdentification typeDocument, String numberIdentification) {
-        //falta agregar la busqueda con foto
-        return clientRepository.findByTypeIdentificationAndNumberIdentification(typeDocument, numberIdentification);
+    public Client getClient(String documentAbbreviation, String numberIdentification) {
+
+        Client clientQuery = clientRepository.findByTypeIdentificationAndNumberIdentification(documentAbbreviation, numberIdentification);
+
+        if(clientQuery == null){
+            return null;
+        }
+
+        Photo photoQuery = photoClient.getPhoto(clientQuery.getPhotoId()).getBody();
+        clientQuery.setPhoto(photoQuery);
+
+        return clientQuery;
     }
 
     @Override
     public Client getClient(Long clientId) {
-        //falta agregar la busqueda con foto
-        return clientRepository.findById(clientId).orElse(null);
+
+        Client clientQuery = clientRepository.findById(clientId).orElse(null);
+
+        if(clientQuery == null){
+            return null;
+        }
+
+        Photo photoQuery = photoClient.getPhoto(clientQuery.getPhotoId()).getBody();
+        clientQuery.setPhoto(photoQuery);
+
+        return clientQuery;
     }
 
     @Override
     public Client createClient(Client client) throws IOException {
+
+        Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
+
+        if (clientQuery != null){
+            return  clientQuery;
+        }
 
         City cityQuery = cityService.getCity(client.getCity().getId());
         if(cityQuery == null){
@@ -75,15 +119,10 @@ public class ClientServiceImpl implements ClientService {
 
         client.setTypeIdentification(typeIdentificationQuery);
 
-        Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
-
-        if (clientQuery != null){
-            return  clientQuery;
-        }
-
         Photo photoCreate = photoClient.addPhoto(client.getPhoto()).getBody();
 
         client.setPhoto(photoCreate);
+        client.setPhotoId(photoCreate.getId());
 
         client.setState("CREATED");
         client = clientRepository.save(client);
@@ -93,20 +132,43 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client updateClient(Client client) {
+
         Client clientQuery = getClient(client.getId());
 
         if (clientQuery == null){
             return  null;
         }
 
+        if(!client.getTypeIdentification().getAbbreviation().equals(clientQuery.getTypeIdentification().getAbbreviation()) || !client.getNumberIdentification().equals(clientQuery.getNumberIdentification())){
+            Client clientQueryRepeated = getClient(client.getTypeIdentification().getAbbreviation(), client.getNumberIdentification());
+
+            if (clientQueryRepeated != null){
+                return  clientQueryRepeated;
+            }
+        }
+
+        City cityQuery = cityService.getCity(client.getCity().getId());
+        if(cityQuery == null){
+            client.setCity(null);
+            return client;
+        }
+
+        TypeIdentification typeIdentificationQuery = typeIdentificationService.getTypeIdentificationByAbbreviation(client.getTypeIdentification().getAbbreviation());
+        if(typeIdentificationQuery == null){
+            client.setTypeIdentification(null);
+            return client;
+        }
+
         clientQuery.setName(client.getName());
         clientQuery.setLastName(client.getLastName());
         clientQuery.setAge(client.getAge());
         clientQuery.setNumberIdentification(client.getNumberIdentification());
-        clientQuery.setTypeIdentification(client.getTypeIdentification());
-        clientQuery.setCity(client.getCity());
+        clientQuery.setTypeIdentification(typeIdentificationQuery);
+        clientQuery.setCity(cityQuery);
 
-        //update photo
+        Photo photoUpdate = photoClient.updatePhoto(client.getPhotoId(), client.getPhoto()).getBody();
+
+        client.setPhoto(photoUpdate);
 
         return clientRepository.save(clientQuery);
     }
@@ -117,10 +179,12 @@ public class ClientServiceImpl implements ClientService {
         Client clientQuery = getClient(client.getId());
 
         if (clientQuery == null){
-            return  null;
+            return null;
         }
 
+        photoClient.deletePhoto(clientQuery.getPhotoId());
         clientQuery.setState("DELETED");
         return clientRepository.save(clientQuery);
     }
+    //public ResponseEntity<List<CustomerDto>> findByIdType(IdType idType)
 }

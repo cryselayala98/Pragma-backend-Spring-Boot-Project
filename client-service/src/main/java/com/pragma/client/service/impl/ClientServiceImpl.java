@@ -83,6 +83,8 @@ public class ClientServiceImpl implements ClientService {
 
         Photo photoCreate = photoClient.addPhoto(client.getPhoto()).getBody();
 
+        client.setPhoto(photoCreate);
+
         client.setState("CREATED");
         client = clientRepository.save(client);
 

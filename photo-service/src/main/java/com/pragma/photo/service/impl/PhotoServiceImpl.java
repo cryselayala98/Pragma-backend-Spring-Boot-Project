@@ -4,6 +4,7 @@ import com.pragma.photo.entity.Photo;
 import com.pragma.photo.repository.PhotoRepository;
 import com.pragma.photo.service.PhotoService;
 import com.pragma.photo.utilities.SequenceUtils.SequenceService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +14,14 @@ import java.io.IOException;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PhotoServiceImpl implements PhotoService {
 
     @Autowired
-    private PhotoRepository photoRepository;
+    private final PhotoRepository photoRepository;
 
     @Autowired
-    private SequenceService sequenceService;
+    private final SequenceService sequenceService;
 
     private static final String PHOTO_NAME = "client_photo_";
 

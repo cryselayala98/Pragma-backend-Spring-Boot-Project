@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.5.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 
@@ -36,12 +37,14 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	//compile 'org.javassist:javassist:3.28.0-GA'
 	implementation group: 'de.codecentric', name: 'spring-boot-admin-starter-client', version: '2.2.1'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	//implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+	testImplementation "org.mockito:mockito-core:3.+"
+	implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 dependencyManagement {
 	imports {

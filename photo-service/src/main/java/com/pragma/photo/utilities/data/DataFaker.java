@@ -14,7 +14,7 @@ public class DataFaker {
 
     public static Photo getAnyPhoto(){
         return Photo.builder()
-                .id(faker.idNumber().toString())
+                .id(Long.toString(faker.number().randomNumber()))
                 .photo(faker.avatar().image().getBytes())
                 .photoNumber(faker.number().randomNumber())
                 .build();

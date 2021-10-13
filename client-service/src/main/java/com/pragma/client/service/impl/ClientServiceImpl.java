@@ -11,6 +11,7 @@ import com.pragma.client.repository.TypeIdentificationRepository;
 import com.pragma.client.service.CityService;
 import com.pragma.client.service.ClientService;
 import com.pragma.client.service.TypeIdentificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,19 +25,20 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     @Autowired
-    ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
-    TypeIdentificationService typeIdentificationService;
+    private final TypeIdentificationService typeIdentificationService;
 
     @Autowired
-    CityService cityService;
+    private final CityService cityService;
 
     @Autowired
-    PhotoClient photoClient;
+    private final PhotoClient photoClient;
 
     @Override
     public Page<Client> findClientAll(Pageable pageable) {
@@ -101,7 +103,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client createClient(Client client) throws IOException {
 
-        Client clientQuery = clientRepository.findByNumberIdentification (client.getNumberIdentification());
+        Client clientQuery = getClient(client.getTypeIdentification().getAbbreviation(), client.getNumberIdentification());
 
         if (clientQuery != null){
             return  clientQuery;

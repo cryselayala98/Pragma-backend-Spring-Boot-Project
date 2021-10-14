@@ -24,3 +24,9 @@ spring:
           uri: lb://client-service
           predicates:
             - Path=/clients/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
